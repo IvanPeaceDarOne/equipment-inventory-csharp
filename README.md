@@ -55,12 +55,12 @@ Examples:
 
 | Error | Example | Reason |
 |---|---|---|
-| `FORMAT`    | `add;Lamp;3;12.50;2026-10-20`                                                                | The command has the wrong number of fields. |
-| `VALUE`     | `add;a-1;Lamp;3;12.50;2026-10-20`                                                            | The command has enough fields, but one or more values do not meet the program rules. |
-| `DUPLICATE` | First input: `add;a1;Lamp;3;12.50;2026-10-20` Second input: `add;A1;Lamp;3;12.50;2026-10-20` | An attempt to add equipment with a code that already exists in the collection. |
-| `MISSING`   | First input: `add;a1;Lamp;3;12.50;2026-10-20` Second input: `find;b2`                        | The requested equipment could not be found. |
-| `STOCK`     | First input: `add;a1;Lamp;3;12.50;2026-10-20` Second input: `issue;a1;5`                     | After the operation, the equipment quantity would go outside the allowed limits. |
-| `UNKNOWN`   | `search;a1;Lamp;3;12.50;2026-10-20`                                                          | An unknown command was entered. |
+| `FORMAT`    | `add;Lamp;3;12.50;2026-10-20`                                                                    | The command has the wrong number of fields. |
+| `VALUE`     | `add;a-1;Lamp;3;12.50;2026-10-20`                                                                | The command has enough fields, but one or more values do not meet the program rules. |
+| `DUPLICATE` | First input: `add;a1;Lamp;3;12.50;2026-10-20` <br>Second input: `add;A1;Lamp;3;12.50;2026-10-20` | An attempt to add equipment with a code that already exists in the collection. |
+| `MISSING`   | First input: `add;a1;Lamp;3;12.50;2026-10-20` <br>Second input: `find;b2`                        | The requested equipment could not be found. |
+| `STOCK`     | First input: `add;a1;Lamp;3;12.50;2026-10-20` <br>Second input: `issue;a1;5`                     | After the operation, the equipment quantity would go outside the allowed limits. |
+| `UNKNOWN`   | `search;a1;Lamp;3;12.50;2026-10-20`                                                              | An unknown command was entered. |
 
 ## Example
 
