@@ -66,19 +66,22 @@ Examples:
 
 Input:
 
+```text
 add; a1 ; Lamp ;3;12.50;2026-10-20
 receive;A1;2
 find;a1
 total
 quit
+```
 
 Output:
 
+```text
 OK A1 3
 OK A1 5
 A1;Lamp;5;12.50;2026-10-20
 TOTAL 62.50
-
+```
 
 ## Chosen Types and Data Structures
 
