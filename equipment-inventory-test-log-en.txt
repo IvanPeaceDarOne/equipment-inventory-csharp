@@ -1,0 +1,288 @@
+Equipment Inventory — Test Log
+
+Each scenario was run in a new program session.
+After each failed command, find or total was run
+to make sure that the registry state did not change.
+
+### Scenario 1: Testing add, find, and total
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+find;a1
+total
+quit
+
+# Expected result:
+
+OK A1 3
+A1;Lamp;3;12.50;2026-10-20
+TOTAL 37.50
+
+# Actual result:
+
+OK A1 3
+A1;Lamp;3;12.50;2026-10-20
+TOTAL 37.50
+
+# Scenario 1: PASS
+
+### Scenario 2: Testing list
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+list
+add;b2;Desk;2;100.00;2026-11-01
+list
+quit
+
+# Expected result:
+
+OK A1 3
+A1;Lamp;3;12.50;2026-10-20
+OK B2 2
+A1;Lamp;3;12.50;2026-10-20
+B2;Desk;2;100.00;2026-11-01
+
+# Actual result:
+
+OK A1 3
+A1;Lamp;3;12.50;2026-10-20
+OK B2 2
+A1;Lamp;3;12.50;2026-10-20
+B2;Desk;2;100.00;2026-11-01
+
+# Scenario 2: PASS
+
+### Scenario 3: Empty input
+
+# Input:
+
+[empty line]
+quit
+
+# Expected result:
+
+Nothing is printed.
+
+# Actual result:
+
+Nothing is printed.
+
+# Scenario 3: PASS
+
+### Scenario 4: Unknown command
+
+# Input:
+
+search;b2;Desk;2;100.00;2026-11-01
+total
+quit
+
+# Expected result:
+
+ERROR UNKNOWN
+TOTAL 0.00
+
+# Actual result:
+
+ERROR UNKNOWN
+TOTAL 0.00
+
+# Scenario 4: PASS
+
+### Scenario 5: Duplicate code with different casing
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+add;A1;Other;1;1.00;2026-10-20
+find;A1
+quit
+
+# Expected result:
+
+OK A1 3
+ERROR DUPLICATE
+A1;Lamp;3;12.50;2026-10-20
+
+# Actual result:
+
+OK A1 3
+ERROR DUPLICATE
+A1;Lamp;3;12.50;2026-10-20
+
+# Scenario 5: PASS
+
+### Scenario 6: Negative quantity
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+add;b2;Desk;-1;100.00;2026-11-01
+find;a1
+quit
+
+# Expected result:
+
+OK A1 3
+ERROR VALUE
+A1;Lamp;3;12.50;2026-10-20
+
+# Actual result:
+
+OK A1 3
+ERROR VALUE
+A1;Lamp;3;12.50;2026-10-20
+
+# Scenario 6: PASS
+
+### Scenario 7: Invalid date
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+add;b2;Desk;2;100.00;2027-02-29
+total
+quit
+
+# Expected result:
+
+OK A1 3
+ERROR VALUE
+TOTAL 37.50
+
+# Actual result:
+
+OK A1 3
+ERROR VALUE
+TOTAL 37.50
+
+# Scenario 7: PASS
+
+### Scenario 8: Price with a comma
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+add;b2;Desk;2;12,50;2026-11-01
+total
+quit
+
+# Expected result:
+
+OK A1 3
+ERROR VALUE
+TOTAL 37.50
+
+# Actual result:
+
+OK A1 3
+ERROR VALUE
+TOTAL 37.50
+
+# Scenario 8: PASS
+
+### Scenario 9: Receive for a missing code
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+receive;b2;1
+find;a1
+quit
+
+# Expected result:
+
+OK A1 3
+ERROR MISSING
+A1;Lamp;3;12.50;2026-10-20
+
+# Actual result:
+
+OK A1 3
+ERROR MISSING
+A1;Lamp;3;12.50;2026-10-20
+
+# Scenario 9: PASS
+
+### Scenario 10: Receive above the allowed limit
+
+# Input:
+
+add;a1;Lamp;5;12.50;2026-10-20
+receive;a1;99996
+find;a1
+quit
+
+# Expected result:
+
+OK A1 5
+ERROR VALUE
+A1;Lamp;5;12.50;2026-10-20
+
+# Actual result:
+
+OK A1 5
+ERROR VALUE
+A1;Lamp;5;12.50;2026-10-20
+
+# Scenario 10: PASS
+
+### Scenario 11: Issue more than is available in stock
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+issue;a1;5
+find;a1
+quit
+
+# Expected result:
+
+OK A1 3
+ERROR STOCK
+A1;Lamp;3;12.50;2026-10-20
+
+# Actual result:
+
+OK A1 3
+ERROR STOCK
+A1;Lamp;3;12.50;2026-10-20
+
+# Scenario 11: PASS
+
+### Scenario 12: Empty due result
+
+# Input:
+
+add;a1;Lamp;3;12.50;2026-10-20
+due;2026-10-19
+quit
+
+# Expected result:
+
+OK A1 3
+EMPTY
+
+# Actual result:
+
+OK A1 3
+EMPTY
+
+# Scenario 12: PASS
+
+### Additional check: EOF
+
+After a valid command, EOF was sent with Ctrl + Z, Enter in the Windows terminal.
+The program ended without extra output and without an error.
+
+Status: PASS
+
+### Debug and Release check
+
+The basic scenario was run in both Debug and Release configurations.
+The output was the same in both configurations.
+
+Status: PASS

@@ -1,0 +1,133 @@
+КОНСОЛЬНИЙ РЕЄСТР ОБЛАДНАННЯ — СЦЕНАРІЇ ПЕРЕВІРКИ
+===================================================
+
+Запускай кожен блок у новому запуску програми, щоб записи з попереднього блоку не впливали на результат.
+
+1. БАЗОВИЙ СЦЕНАРІЙ
+-------------------
+Ввід:
+add; a1 ; Lamp ;3;12.50;2026-10-20
+add;B2;Mouse;2;7.25;2027-01-01
+list
+find;a1
+receive;A1;2
+issue;b2;1
+due;2026-12-31
+total
+quit
+
+Очікуваний вивід:
+OK A1 3
+OK B2 2
+A1;Lamp;3;12.50;2026-10-20
+B2;Mouse;2;7.25;2027-01-01
+A1;Lamp;3;12.50;2026-10-20
+OK A1 5
+OK B2 1
+A1;Lamp;5;12.50;2026-10-20
+TOTAL 69.75
+
+2. ПОРОЖНІЙ РЕЄСТР
+------------------
+Ввід:
+list
+due;2026-12-31
+total
+quit
+
+Очікуваний вивід:
+EMPTY
+EMPTY
+TOTAL 0.00
+
+Порожній рядок або рядок лише з пробілами не повинні нічого виводити.
+
+3. ADD: ОСНОВНІ ПОМИЛКИ
+-----------------------
+Команда                                              Очікуваний результат
+add;A1;Lamp;1;1.00                                  ERROR FORMAT
+add;A1;Lamp;1;1.00;2026-01-01;X                     ERROR FORMAT
+add;;Lamp;1;1.00;2026-01-01                         ERROR VALUE
+add;A-1;Lamp;1;1.00;2026-01-01                      ERROR VALUE
+add;К1;Lamp;1;1.00;2026-01-01                       ERROR VALUE
+add;A1;   ;1;1.00;2026-01-01                        ERROR VALUE
+add;A1;Lamp;-1;1.00;2026-01-01                      ERROR VALUE
+add;A1;Lamp;100001;1.00;2026-01-01                  ERROR VALUE
+add;A1;Lamp;1;0;2026-01-01                          ERROR VALUE
+add;A1;Lamp;1;12,50;2026-01-01                      ERROR VALUE
+add;A1;Lamp;1;12.;2026-01-01                        ERROR VALUE
+add;A1;Lamp;1;12.345;2026-01-01                     ERROR VALUE
+add;A1;Lamp;1;1000000.01;2026-01-01                 ERROR VALUE
+add;A1;Lamp;1;12.50;2027-02-29                      ERROR VALUE
+add;A1;Lamp;1;12.50;2028-02-29                      OK A1 1
+
+4. ДУБЛІКАТИ ТА РЕГІСТР
+-----------------------
+Ввід:
+add;A1;Lamp;1;10.00;2026-01-01
+add;a1;Other;2;20.00;2027-01-01
+add; A1 ;Other;2;20.00;2027-01-01
+quit
+
+Очікуваний вивід:
+OK A1 1
+ERROR DUPLICATE
+ERROR DUPLICATE
+
+5. RECEIVE ТА ISSUE
+-------------------
+Ввід:
+add;A1;Lamp;5;10.00;2026-01-01
+receive;B2;1
+receive;A1;0
+receive;A1;99996
+receive;A1;99995
+receive;A1;1
+issue;A1;100001
+issue;A1;100000
+issue;A1;1
+quit
+
+Очікуваний вивід:
+OK A1 5
+ERROR MISSING
+ERROR VALUE
+ERROR VALUE
+OK A1 100000
+ERROR VALUE
+ERROR VALUE
+OK A1 0
+ERROR STOCK
+
+6. DUE
+------
+Ввід:
+add;A1;Lamp;3;12.50;2026-10-20
+add;B2;Mouse;2;7.25;2026-12-31
+add;C3;Monitor;1;100.00;2027-01-01
+due;2026-10-19
+due;2026-12-31
+due;2026/12/31
+quit
+
+Очікуваний вивід:
+OK A1 3
+OK B2 2
+OK C3 1
+EMPTY
+A1;Lamp;3;12.50;2026-10-20
+B2;Mouse;2;7.25;2026-12-31
+ERROR VALUE
+
+7. ФОРМАТ КОМАНД І НЕВІДОМА КОМАНДА
+------------------------------------
+Команда                      Очікуваний результат
+receive;A1                   ERROR FORMAT
+issue;A1;1;extra             ERROR FORMAT
+find                         ERROR FORMAT
+list;A1                      ERROR FORMAT
+due                          ERROR FORMAT
+total;extra                  ERROR FORMAT
+delete;A1                    ERROR UNKNOWN
+
+Команда quit і EOF повинні завершувати програму без додаткового виводу.
